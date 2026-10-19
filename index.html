@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="1·2·3·5장 연습문제 PDF 기반 웹 프로그래밍 중간고사 대비 25문항 모의고사">
+  <title>웹 프로그래밍 · 중간고사 실전 모의고사</title>
+  <style>
+    :root {
+      --ink: #17233b;
+      --muted: #62708a;
+      --paper: #f7f4ed;
+      --card: rgba(255,255,255,.92);
+      --line: #dfe5e8;
+      --navy: #101a31;
+      --navy-2: #172744;
+      --mint: #1fa58a;
+      --mint-soft: #dff6ef;
+      --coral: #f27b62;
+      --coral-soft: #ffebe5;
+      --amber: #e0a23a;
+      --ok: #167b5e;
+      --bad: #c64b43;
+      --shadow: 0 18px 50px rgba(23,35,59,.10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(31,165,138,.13), transparent 28rem),
+        radial-gradient(circle at 90% 8%, rgba(242,123,98,.12), transparent 26rem),
+        var(--paper);
+      font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+      line-height: 1.65;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    code, pre { font-family: Consolas, "D2Coding", monospace; }
+
+    .hero {
+      color: white;
+      background:
+        linear-gradient(115deg, rgba(16,26,49,.98), rgba(23,39,68,.95)),
+        var(--navy);
+      border-bottom: 5px solid var(--mint);
+      padding: 54px 24px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+    }
+    .hero::before { width: 420px; height: 420px; right: -120px; top: -220px; }
+    .hero::after { width: 220px; height: 220px; right: 130px; top: -100px; }
+    .hero-inner { max-width: 1180px; margin: auto; position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: #c9fff1;
+      font-size: .83rem;
+      letter-spacing: .08em;
+      font-weight: 800;
+    }
+    .hero h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -.055em;
+      max-width: 820px;
+    }
+    .hero p { margin: 0; max-width: 760px; color: #c7d2e8; font-size: 1.03rem; }
+    .hero-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 25px; }
+    .hero-stat {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: #eaf1ff;
+      font-size: .9rem;
+    }
+    .hero-stat strong { color: #83e8d2; }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar { position: sticky; top: 18px; display: grid; gap: 14px; }
+    .panel {
+      background: var(--card);
+      border: 1px solid rgba(23,35,59,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(12px);
+    }
+    .timer-label, .panel-label {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .timer { font-size: 2.05rem; font-weight: 900; letter-spacing: .02em; margin: 2px 0 12px; }
+    .timer.danger { color: var(--bad); }
+    .button-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 13px;
+      font-weight: 800;
+      color: var(--ink);
+      background: #edf1f5;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: var(--mint); color: white; }
+    .btn.dark { background: var(--navy); color: white; }
+    .btn.warm { background: var(--coral); color: white; }
+    .btn.ghost { background: transparent; border: 1px solid var(--line); }
+    .btn.small { padding: 7px 10px; font-size: .82rem; }
+
+    .progress-number { font-size: 1.45rem; font-weight: 900; margin: 3px 0 8px; }
+    .progress-track { height: 9px; border-radius: 99px; background: #e7ecef; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--mint), #5fd8bc); transition: width .25s ease; }
+    .jump-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 12px; }
+    .jump {
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+    .jump.done { color: white; background: var(--mint); border-color: var(--mint); }
+    .jump.wrong { background: var(--coral); border-color: var(--coral); color: white; }
+
+    main { min-width: 0; }
+    .intro-card {
+      background: var(--card);
+      border: 1px solid rgba(23,35,59,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(22px, 4vw, 38px);
+      margin-bottom: 24px;
+    }
+    .intro-card h2 { margin: 0 0 8px; font-size: 1.55rem; letter-spacing: -.03em; }
+    .intro-card p { margin: 0; color: var(--muted); }
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 22px;
+    }
+    .priority-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #f8faf9;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 12px 13px;
+      font-size: .9rem;
+    }
+    .priority-item strong { display: block; }
+    .priority-no {
+      flex: 0 0 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: white;
+      background: var(--navy);
+      font-size: .75rem;
+      font-weight: 900;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin: 40px 0 14px;
+    }
+    .section-heading h2 { margin: 0; font-size: 1.7rem; letter-spacing: -.035em; }
+    .section-heading p { margin: 4px 0 0; color: var(--muted); font-size: .92rem; }
+    .section-index { color: var(--mint); font-weight: 900; font-size: .85rem; letter-spacing: .08em; }
+
+    .question {
+      background: var(--card);
+      border: 1px solid rgba(23,35,59,.09);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 32px rgba(23,35,59,.07);
+      padding: clamp(20px, 3vw, 30px);
+      margin-bottom: 16px;
+      scroll-margin-top: 20px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .question.is-correct { border-color: rgba(31,165,138,.55); box-shadow: 0 12px 30px rgba(31,165,138,.10); }
+    .question.is-wrong { border-color: rgba(242,123,98,.68); box-shadow: 0 12px 30px rgba(242,123,98,.11); }
+    .question.hidden-by-filter { display: none; }
+    .q-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 13px; }
+    .q-no {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: var(--navy);
+      color: white;
+      font-weight: 900;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: var(--mint-soft);
+      color: #106e5a;
+      font-size: .75rem;
+      font-weight: 900;
+    }
+    .badge.warm { background: var(--coral-soft); color: #a43e33; }
+    .badge.source { background: #edf1f7; color: #53627b; }
+    .question h3 { margin: 0 0 16px; font-size: 1.08rem; line-height: 1.65; }
+    .stem-note { color: var(--muted); font-size: .9rem; }
+
+    .options { display: grid; gap: 9px; }
+    .option {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      align-items: start;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 13px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .option:hover { border-color: #9ccfc2; background: #fbfffd; }
+    .option input { margin-top: 5px; accent-color: var(--mint); }
+    .option.correct-choice { background: var(--mint-soft); border-color: #7dd0ba; }
+    .option.wrong-choice { background: var(--coral-soft); border-color: #f2a99a; }
+    pre {
+      margin: 12px 0;
+      padding: 15px 17px;
+      overflow-x: auto;
+      border-radius: 13px;
+      color: #dce8ff;
+      background: #111a2d;
+      border: 1px solid #233354;
+      line-height: 1.55;
+      font-size: .9rem;
+    }
+    .answer-area {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 13px 14px;
+      color: var(--ink);
+      background: white;
+      outline: none;
+    }
+    .answer-area:focus { border-color: var(--mint); box-shadow: 0 0 0 3px rgba(31,165,138,.12); }
+    .q-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .hint-box {
+      display: none;
+      margin-top: 10px;
+      border-left: 4px solid #c29a37;
+      border-radius: 0 13px 13px 0;
+      padding: 11px 13px;
+      color: #594b24;
+      background: #fff9e8;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+    .hint-box.show { display: block; }
+    .explanation {
+      display: none;
+      margin-top: 16px;
+      border-left: 4px solid var(--mint);
+      background: #f1faf7;
+      border-radius: 0 13px 13px 0;
+      padding: 14px 16px;
+    }
+    .explanation.show { display: block; }
+    .explanation strong { color: #116d59; }
+    .explanation p { margin: 6px 0 0; }
+    .key-points { margin: 8px 0 0 1.2rem; padding: 0; }
+    .self-check {
+      display: none;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border: 1px dashed #a4b7ad;
+      border-radius: 11px;
+      background: rgba(255,255,255,.65);
+    }
+    .self-check.show { display: block; }
+    .self-check label { display: flex; gap: 8px; align-items: center; font-weight: 800; }
+    .self-check input { accent-color: var(--mint); width: 18px; height: 18px; }
+
+    .submit-card {
+      margin-top: 30px;
+      color: white;
+      background: linear-gradient(135deg, var(--navy), #20385e);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .submit-card h2 { margin: 0 0 6px; }
+    .submit-card p { color: #c7d2e8; margin: 0 0 18px; }
+    .result {
+      display: none;
+      margin-top: 20px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .result.show { display: block; }
+    .score { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: #87efd8; line-height: 1.1; }
+    .score-sub { margin-top: 6px; color: #d8e3f7; }
+    .disclaimer {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #fff7df;
+      border: 1px solid #f0d99c;
+      color: #71571d;
+      font-size: .88rem;
+    }
+    footer { max-width: 1180px; margin: -42px auto 36px; padding: 0 20px; color: var(--muted); font-size: .82rem; }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      transform: translateY(120px);
+      opacity: 0;
+      color: white;
+      background: var(--navy);
+      border-radius: 12px;
+      padding: 11px 15px;
+      box-shadow: var(--shadow);
+      transition: all .25s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Simple exam-sheet presentation */
+    body { background: #f3f4f6; }
+    .hero {
+      color: var(--ink);
+      background: white;
+      border-bottom: 1px solid #d9dde4;
+      padding: 34px 20px 28px;
+    }
+    .hero::before, .hero::after { display: none; }
+    .hero-inner { max-width: 900px; }
+    .eyebrow { color: #276b5c; border-color: #a8cfc5; background: #eef8f5; }
+    .hero h1 { margin-top: 13px; font-size: clamp(1.8rem, 5vw, 2.7rem); }
+    .hero p { color: var(--muted); }
+    .hero-stats { margin-top: 17px; }
+    .hero-stat { color: var(--ink); background: #f4f6f8; border-color: #e0e4e9; padding: 7px 10px; }
+    .hero-stat strong { color: #167b65; }
+    .shell { max-width: 900px; grid-template-columns: 1fr; gap: 0; padding-top: 20px; }
+    .sidebar { position: static; display: block; }
+    .sidebar .panel:nth-child(1), .sidebar .panel:nth-child(2) { display: none; }
+    .sidebar .panel:last-child {
+      padding: 12px 0 18px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .sidebar .panel-label { display: none; }
+    .panel, .intro-card, .question, .submit-card { backdrop-filter: none; box-shadow: none; }
+    .intro-card { padding: 24px; border-radius: 10px; }
+    .priority-grid { grid-template-columns: 1fr; gap: 4px; }
+    .priority-item { background: transparent; border: 0; border-bottom: 1px solid #eceff2; border-radius: 0; padding: 8px 2px; }
+    .priority-no { border-radius: 4px; background: #506079; }
+    .question { border-radius: 9px; padding: 22px; margin-bottom: 12px; }
+    .q-no { border-radius: 6px; background: #33435e; }
+    .badge { border-radius: 5px; }
+    .option, .answer-area, pre { border-radius: 7px; }
+    .btn { border-radius: 6px; }
+    .submit-card { color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 10px; }
+    .submit-card p { color: var(--muted); }
+    .result { background: #f3f7f5; border-color: #cfe1da; }
+    .score { color: var(--ok); }
+    .score-sub { color: var(--muted); }
+    footer { max-width: 900px; margin-top: -42px; }
+
+    /* Focused one-question quiz mode */
+    body { background: #f5f5f2; color: #222; }
+    .hero { padding: 22px 20px 18px; border-top: 5px solid #245b47; }
+    .hero-inner { max-width: 760px; }
+    .eyebrow {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #245b47;
+      font-size: .78rem;
+    }
+    .hero h1 { margin: 6px 0 0; font-size: clamp(1.55rem, 5vw, 2.15rem); letter-spacing: -.035em; }
+    .hero p, .hero-stats, .sidebar, .intro-card, .section-heading, .submit-card, footer { display: none !important; }
+    .shell { max-width: 760px; padding: 18px 14px 90px; }
+    .simple-guide {
+      margin-bottom: 12px;
+      padding: 15px 16px;
+      background: white;
+      border: 1px solid #d9ddd8;
+    }
+    .simple-guide-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .simple-guide h2 { margin: 0; font-size: 1rem; }
+    .simple-guide p { margin: 3px 0 0; color: #666; font-size: .84rem; }
+    .simple-status { display: flex; gap: 12px; margin-top: 11px; font-size: .84rem; color: #555; }
+    .keyboard-help { margin-top: 8px; color: #747474; font-size: .76rem; }
+    .keyboard-help kbd { display: inline-block; min-width: 25px; margin: 0 2px; padding: 2px 6px; border: 1px solid #cfd3ce; background: #f7f8f6; color: #333; font: inherit; font-weight: 800; text-align: center; }
+    .simple-track { height: 5px; background: #e4e7e3; margin-top: 8px; overflow: hidden; }
+    .simple-fill { height: 100%; width: 0; background: #2f775c; transition: width .2s ease; }
+    .text-button { flex-shrink: 0; white-space: nowrap; border: 0; background: transparent; color: #555; padding: 4px; font-size: .8rem; text-decoration: underline; }
+    .question { display: none; border: 1px solid #d6d9d5; border-radius: 2px; background: white; padding: 25px; }
+    .question.active { display: block; }
+    .question.is-correct, .question.is-wrong { box-shadow: none; }
+    .question.is-correct { border-color: #7bad96; }
+    .question.is-wrong { border-color: #d2918d; }
+    .q-meta { margin-bottom: 16px; }
+    .q-no { width: 32px; height: 32px; border-radius: 2px; background: #2f3a35; }
+    .badge { padding: 0; border-radius: 0; background: transparent; color: #2f6651; font-size: .76rem; }
+    .badge.warm, .badge.source { background: transparent; color: #666; }
+    .q-meta .badge:last-child { display: none; }
+    .question h3 { font-size: 1.12rem; line-height: 1.7; margin-bottom: 20px; }
+    .pdf-source { margin: -10px 0 18px; color: #6a6f6b; font-size: .78rem; line-height: 1.5; }
+    .pdf-source strong { color: #3f5f52; }
+    .options { gap: 8px; }
+    .option { border-radius: 2px; padding: 13px 14px; }
+    .option:hover { border-color: #7f9e91; background: #fafcfb; }
+    .option.correct-choice { background: #e7f3ec; border-color: #579274; }
+    .option.wrong-choice { background: #f8e8e7; border-color: #c97d77; }
+    .option.locked { cursor: default; }
+    .option.locked:hover { border-color: #d6d9d5; background: white; }
+    .option.locked.correct-choice:hover { background: #e7f3ec; border-color: #579274; }
+    .option.locked.wrong-choice:hover { background: #f8e8e7; border-color: #c97d77; }
+    .answer-area { border-radius: 2px; min-height: 150px; }
+    .q-actions { margin-top: 12px; }
+    [data-type="mcq"] .q-actions { display: none; }
+    .btn { border-radius: 2px; }
+    .instant-feedback {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-left: 4px solid #888;
+      background: #f5f5f3;
+      font-weight: 800;
+    }
+    .instant-feedback.show { display: block; }
+    .instant-feedback.correct { color: #1f684d; border-color: #2f775c; background: #edf7f1; }
+    .instant-feedback.wrong { color: #9c3f3a; border-color: #bd625d; background: #fbefee; }
+    .instant-feedback p { margin: 6px 0 0; font-weight: 500; line-height: 1.65; }
+    .explanation {
+      margin-top: 0;
+      border-left: 4px solid #bbb;
+      border-radius: 0;
+      background: #fafafa;
+      padding: 13px 14px;
+    }
+    .explanation strong { color: inherit; }
+    .memory-tip {
+      margin: 12px 0 0 !important;
+      padding: 9px 10px;
+      background: #fff8dc;
+      border: 1px solid #eadca4;
+      color: #554917;
+      font-weight: 700;
+    }
+    .self-check { display: none !important; }
+    .question-nav {
+      position: sticky;
+      bottom: 10px;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 10px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid #cfd4cf;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    }
+    .question-nav button, .question-nav select {
+      min-height: 42px;
+      border: 1px solid #bfc5bf;
+      border-radius: 2px;
+      background: white;
+      color: #222;
+      font-weight: 700;
+      padding: 8px 12px;
+    }
+    .question-nav button:last-child { background: #2f5f4c; border-color: #2f5f4c; color: white; }
+    .question-nav button:disabled { opacity: .4; cursor: default; }
+    .question-nav select { min-width: 92px; }
+    pre { border-radius: 2px; background: #f0f1ef; color: #222; border-color: #d5d8d4; }
+    .final-result-card {
+      display: none;
+      margin-top: 14px;
+      padding: 28px 24px;
+      border: 1px solid #bfc8c1;
+      background: white;
+      text-align: center;
+    }
+    .final-result-card.show { display: block; }
+    .final-result-card h2 { margin: 0 0 8px; font-size: 1.2rem; }
+    .final-score { margin: 16px 0 4px; color: #245b47; font-size: clamp(2.25rem, 8vw, 3.8rem); font-weight: 900; }
+    .final-count { font-size: 1rem; font-weight: 800; }
+    .final-breakdown { margin: 15px auto 18px; color: #555; line-height: 1.8; }
+    .final-note { margin: 0 0 18px; color: #6a6a6a; font-size: .82rem; }
+    .final-result-card button { min-height: 42px; border: 0; background: #2f5f4c; color: white; font-weight: 800; padding: 10px 18px; }
+
+    @media (max-width: 560px) {
+      .hero { padding: 18px 15px 14px; }
+      .shell { padding: 12px 10px calc(92px + env(safe-area-inset-bottom)); }
+      .simple-guide-top { align-items: flex-start; }
+      .simple-status { flex-wrap: wrap; gap: 5px 12px; }
+      .keyboard-help { display: none; }
+      .question { padding: 20px 16px; }
+      .question h3 { font-size: 1rem; }
+      .pdf-source { margin-top: -8px; word-break: keep-all; }
+      .option { min-height: 48px; padding: 12px; touch-action: manipulation; }
+      .answer-area { min-height: 170px; font-size: 16px; }
+      .explanation, .instant-feedback { font-size: .92rem; }
+      .question-nav { grid-template-columns: minmax(0,1fr) 86px minmax(0,1fr); bottom: max(6px, env(safe-area-inset-bottom)); padding: 8px; }
+      .question-nav button, .question-nav select { min-height: 48px; padding: 8px; font-size: 16px; touch-action: manipulation; }
+      .final-result-card { padding: 24px 16px; }
+    }
+
+    @media (max-width: 860px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .priority-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .hero { padding: 40px 18px 34px; }
+      .shell { padding: 18px 12px 64px; }
+      .section-heading { align-items: start; flex-direction: column; }
+    }
+
+    @media print {
+      body { background: white; font-size: 10.5pt; }
+      .hero { background: white; color: black; border-bottom: 2px solid black; padding: 20px 0; }
+      .hero p, .hero-stat { color: #333; }
+      .hero-stat { border-color: #bbb; }
+      .eyebrow { color: #333; border-color: #999; }
+      .shell { display: block; max-width: none; padding: 12px 0; }
+      .sidebar, .q-actions, .submit-card, footer, .toast { display: none !important; }
+      .intro-card, .question { box-shadow: none; border: 1px solid #bbb; break-inside: avoid; }
+      .question { margin-bottom: 10px; padding: 15px; }
+      .explanation, .self-check { display: none !important; }
+      .answer-area { min-height: 72px; }
+      .option { padding: 7px 10px; }
+      pre { color: black; background: #f2f2f2; border-color: #bbb; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">HTML5 · WEB PROGRAMMING</span>
+      <h1>웹 프로그래밍 중간고사 실전 모의고사 25</h1>
+      <p>1·2·3·5장 연습문제 PDF를 모두 읽고, 개념 구분·태그 선택·코드 완성 중심의 출제 가능성이 높은 문항을 구성했습니다.</p>
+      <div class="hero-stats">
+        <span class="hero-stat"><strong>16</strong> 객관식</span>
+        <span class="hero-stat"><strong>9</strong> 주관식</span>
+        <span class="hero-stat"><strong>4</strong>개 장 반영</span>
+        <span class="hero-stat">권장 <strong>60분</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar" aria-label="시험 도구">
+      <section class="panel">
+        <div class="timer-label">연습 타이머</div>
+        <div class="timer" id="timer">60:00</div>
+        <div class="button-row">
+          <button class="btn primary small" id="timerToggle" type="button">시작</button>
+          <button class="btn ghost small" id="timerReset" type="button">초기화</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-label">풀이 진도</div>
+        <div class="progress-number"><span id="answeredCount">0</span> / 25</div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="jump-grid" id="jumpGrid" aria-label="문항 바로가기"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-label">도구</div>
+        <div class="button-row" style="margin-top:10px">
+          <button class="btn dark small" id="gradeSide" type="button">객관식 채점</button>
+          <button class="btn ghost small" id="revealAll" type="button">전체 해설</button>
+          <button class="btn ghost small" id="wrongOnly" type="button" disabled>오답만</button>
+          <button class="btn ghost small" id="printBtn" type="button">인쇄</button>
+          <button class="btn warm small" id="resetAll" type="button">전체 초기화</button>
+        </div>
+      </section>
+    </aside>
+
+    <main>
+      <section class="simple-guide" aria-label="풀이 안내">
+        <div class="simple-guide-top">
+          <div>
+            <h2 id="questionCounter">1 / 25</h2>
+            <p>모르면 먼저 골라도 괜찮습니다. 바로 나오는 쉬운 해설로 익혀보세요.</p>
+          </div>
+          <button class="text-button" id="simpleReset" type="button">처음부터</button>
+        </div>
+        <div class="simple-status">
+          <span id="simpleAnswered">응답 0</span>
+          <span id="liveScore">객관식 정답 0</span>
+        </div>
+        <div class="keyboard-help"><kbd>1~4</kbd> 답안 선택 · <kbd>←</kbd> 이전 · <kbd>→</kbd> 다음 · 문항 순서 랜덤</div>
+        <div class="simple-track" aria-hidden="true"><div class="simple-fill" id="simpleFill"></div></div>
+      </section>
+      <section class="intro-card">
+        <h2>먼저 짚고 갈 출제 예상 핵심</h2>
+        <p>실제 출제를 보장하는 예언이 아니라, 자료에서 반복 설명되고 서로 비교하기 좋은 항목을 우선순위로 뽑은 것입니다.</p>
+        <div class="priority-grid">
+          <div class="priority-item"><span class="priority-no">01</span><div><strong>웹 기초 용어</strong>프로토콜·HTTP·IP 주소·도메인·URL 구분</div></div>
+          <div class="priority-item"><span class="priority-no">02</span><div><strong>HTML 기본 구조</strong>html·head·body·title의 위치와 역할</div></div>
+          <div class="priority-item"><span class="priority-no">03</span><div><strong>경로·링크·표</strong>상대 경로, href·target, 표 구성 태그</div></div>
+          <div class="priority-item"><span class="priority-no">04</span><div><strong>시맨틱 구조</strong>header·nav·section·article·footer 구분</div></div>
+          <div class="priority-item"><span class="priority-no">05</span><div><strong>iframe</strong>src·name·srcdoc 및 target 연결</div></div>
+          <div class="priority-item"><span class="priority-no">06</span><div><strong>폼 입력</strong>input 유형, textarea, action·method</div></div>
+          <div class="priority-item"><span class="priority-no">07</span><div><strong>CSS 기초</strong>선택자·display·background-color</div></div>
+          <div class="priority-item"><span class="priority-no">08</span><div><strong>CSS 크기</strong>width·height와 px 단위</div></div>
+        </div>
+        <div class="disclaimer">권장 풀이 순서: 해설을 닫고 60분 안에 먼저 풀기 → 객관식 자동 채점 → 주관식 모범답안과 키워드 대조 → 틀린 개념을 표시된 PDF 장·페이지에서 다시 확인하기.</div>
+      </section>
+
+      <div class="section-heading">
+        <div><span class="section-index">PART A</span><h2>객관식 16문항</h2><p>각 문항의 정답은 하나입니다.</p></div>
+      </div>
+      <section id="mcqSection" aria-label="객관식 문제"></section>
+
+      <div class="section-heading">
+        <div><span class="section-index">PART B</span><h2>주관식 9문항</h2><p>코드·설정·핵심 용어를 직접 쓰는 연습입니다.</p></div>
+      </div>
+      <section id="shortSection" aria-label="주관식 문제"></section>
+
+      <nav class="question-nav" aria-label="문제 이동">
+        <button id="prevQuestion" type="button">이전</button>
+        <select id="questionPicker" aria-label="문항 선택"></select>
+        <button id="nextQuestion" type="button">다음</button>
+      </nav>
+
+      <section class="final-result-card" id="finalResult" aria-live="polite">
+        <h2>최종 채점 결과</h2>
+        <div class="final-score" id="finalScore">0점</div>
+        <div class="final-count" id="finalCount">정답 0 / 25</div>
+        <div class="final-breakdown" id="finalBreakdown"></div>
+        <p class="final-note">주관식은 입력한 핵심 단어를 기준으로 자동 채점한 연습용 결과입니다.</p>
+        <button id="restartFromResult" type="button">처음부터 다시 풀기</button>
+      </section>
+
+      <section class="submit-card">
+        <h2>풀이를 마쳤나요?</h2>
+        <p>객관식은 자동 채점됩니다. 주관식은 모범답안을 확인한 뒤 스스로 정답 인정 여부를 체크하세요.</p>
+        <div class="button-row">
+          <button class="btn primary" id="gradeMain" type="button">객관식 채점하기</button>
+          <button class="btn warm" id="revealMain" type="button">주관식 모범답안 열기</button>
+        </div>
+        <div class="result" id="result" aria-live="polite">
+          <div class="score" id="scoreText">0 / 16</div>
+          <div class="score-sub" id="scoreSub"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>이 모의고사는 제공된 1·2·3·5장 연습문제 PDF의 범위와 표현을 토대로 만든 학습용 자료입니다. 실제 시험 문항과 동일함을 보장하지 않습니다.</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const questions = [
+      {
+        id: 1, type: 'mcq', chapter: '1장 · 웹 기초', tag: '프로토콜',
+        stem: '통신 약속을 의미하며, 컴퓨터끼리 데이터를 주고받기 위해 미리 정한 규칙은?',
+        options: ['인터넷', '프로토콜', '컴퓨터 네트워크', 'LAN'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p>프로토콜(protocol)은 네트워크에서 데이터를 주고받을 때 지켜야 하는 통신 규약입니다.</p>'
+      },
+      {
+        id: 2, type: 'mcq', chapter: '1장 · 웹 기초', tag: 'HTTP',
+        stem: '웹 페이지를 전송하기 위해 만든 프로토콜은?',
+        options: ['FTP', 'TCP', 'HTTP', 'IP'], answer: 2,
+        explanation: '<strong>정답 ③</strong><p>HTTP는 웹 문서와 자원을 전송하기 위한 응용 계층 프로토콜입니다.</p>'
+      },
+      {
+        id: 3, type: 'mcq', chapter: '1장 · 웹 기초', tag: '주소 체계',
+        stem: '숫자로 이루어진 컴퓨터의 네트워크 주소를 무엇이라고 하는가?',
+        options: ['URL', 'IP 주소', '도메인 이름', 'HTTP'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p>IP 주소는 숫자 기반의 네트워크 주소입니다. 도메인은 이 주소를 사람이 기억하기 쉬운 문자로 나타낸 이름입니다.</p>'
+      },
+      {
+        id: 4, type: 'mcq', chapter: '1장 · 웹 기초', tag: '웹 구성 기술',
+        stem: '웹 페이지의 색상, 글꼴, 배치 등 디자인을 담당하는 기술은?',
+        options: ['HTML', 'CSS', 'HTTP', 'URL'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p>CSS는 웹 페이지의 색상, 글꼴, 크기, 배치와 같은 표현과 디자인을 담당합니다.</p>'
+      },
+      {
+        id: 5, type: 'mcq', chapter: '2장 · HTML 기본', tag: '문서 구조',
+        stem: 'HTML5 문서의 기본 구조에 사용되는 태그가 아닌 것은?',
+        options: ['&lt;html&gt;', '&lt;head&gt;', '&lt;body&gt;', '&lt;frame&gt;'], answer: 3,
+        explanation: '<strong>정답 ④</strong><p>기본 골격은 <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>로 구성됩니다.</p>'
+      },
+      {
+        id: 6, type: 'mcq', chapter: '2장 · HTML 기본', tag: 'title',
+        stem: '브라우저 탭의 문서 제목을 지정하는 &lt;title&gt; 태그의 올바른 위치는?',
+        options: ['DOCTYPE 선언 안', 'html 요소 바깥', 'head 요소 안', 'body 요소 안'], answer: 2,
+        explanation: '<strong>정답 ③</strong><p><code>&lt;title&gt;</code>은 화면 본문이 아닌 문서 메타 정보를 담는 <code>&lt;head&gt;</code> 안에 작성합니다.</p>'
+      },
+      {
+        id: 7, type: 'mcq', chapter: '2장 · HTML 기본', tag: '기본 태그',
+        stem: 'HTML 문서에서 줄을 바꿀 때 사용하는 태그는?',
+        options: ['&lt;p&gt;', '&lt;br&gt;', '&lt;hr&gt;', '&lt;h1&gt;'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p><code>&lt;br&gt;</code>은 문장 안에서 줄을 바꾸는 빈 요소입니다.</p>'
+      },
+      {
+        id: 8, type: 'mcq', chapter: '2장 · HTML 기본', tag: '상대 경로',
+        stem: 'ex2.html이 HTML5/ch02_02/ 폴더에 있고 cola.png가 HTML5/media/ 폴더에 있을 때 올바른 상대 경로는?',
+        options: ['media/cola.png', '../media/cola.png', '../../media/cola.png', '/ch02_02/media/cola.png'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p>현재 폴더에서 <code>..</code>로 한 단계 올라간 뒤 media 폴더로 이동하므로 <code>../media/cola.png</code>입니다.</p>'
+      },
+      {
+        id: 9, type: 'mcq', chapter: '2장 · HTML 기본', tag: '표 태그',
+        stem: 'HTML 표에서 한 개의 가로 행을 만드는 태그는?',
+        options: ['&lt;tr&gt;', '&lt;td&gt;', '&lt;th&gt;', '&lt;caption&gt;'], answer: 0,
+        explanation: '<strong>정답 ①</strong><p><code>&lt;tr&gt;</code>은 표의 한 행을 만듭니다. <code>th</code>와 <code>td</code>는 행 안에 들어가는 셀입니다.</p>'
+      },
+      {
+        id: 10, type: 'mcq', chapter: '2장 · HTML 기본', tag: '하이퍼링크',
+        stem: 'sample.html을 연결하고 새 창 또는 새 탭에서 열도록 작성한 것은?',
+        options: ['&lt;a src="sample.html" target="_new"&gt;', '&lt;a href="sample.html" target="_blank"&gt;', '&lt;a link="sample.html" window="new"&gt;', '&lt;a href="sample.html" target="_self"&gt;'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p>링크 주소는 <code>href</code>, 새 탐색 문맥은 <code>target="_blank"</code>로 지정합니다.</p>'
+      },
+      {
+        id: 11, type: 'mcq', chapter: '3장 · HTML 응용', tag: 'iframe',
+        stem: 'iframe에 표시할 외부 문서의 경로를 지정하는 속성은?',
+        options: ['src', 'name', 'target', 'href'], answer: 0,
+        explanation: '<strong>정답 ①</strong><p><code>src</code> 속성에 iframe 안에 표시할 문서의 경로를 지정합니다.</p>'
+      },
+      {
+        id: 12, type: 'mcq', chapter: '3장 · HTML 응용', tag: '시맨틱 태그',
+        stem: '웹 페이지의 메뉴와 주요 링크를 묶을 때 사용하는 시맨틱 태그는?',
+        options: ['&lt;header&gt;', '&lt;nav&gt;', '&lt;article&gt;', '&lt;footer&gt;'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p><code>&lt;nav&gt;</code>는 메뉴나 주요 탐색 링크를 모아 두는 영역입니다.</p>'
+      },
+      {
+        id: 13, type: 'mcq', chapter: '3장 · HTML 응용', tag: '폼 입력',
+        stem: '여러 줄의 문자를 입력받기에 가장 알맞은 태그는?',
+        options: ['&lt;input type="text"&gt;', '&lt;input type="radio"&gt;', '&lt;textarea&gt;', '&lt;select&gt;'], answer: 2,
+        explanation: '<strong>정답 ③</strong><p><code>textarea</code>는 여러 줄의 텍스트를 입력받는 요소입니다.</p>'
+      },
+      {
+        id: 14, type: 'mcq', chapter: '5장 · CSS', tag: 'display',
+        stem: '요소를 화면에서 숨기고, 그 요소가 차지하던 자리까지 없애는 display 값은?',
+        options: ['inline', 'block', 'none', 'inline-block'], answer: 2,
+        explanation: '<strong>정답 ③</strong><p><code>display: none</code>은 요소를 보이지 않게 하고 차지하던 자리도 제거합니다.</p>'
+      },
+      {
+        id: 15, type: 'mcq', chapter: '1장 · CSS 기초', tag: '가로 크기',
+        stem: 'CSS에서 요소의 가로 크기를 지정하는 속성은?',
+        options: ['width', 'height', 'color', 'margin'], answer: 0,
+        explanation: '<strong>정답 ①</strong><p><code>width</code>는 요소의 가로 크기를 지정합니다. 세로 크기는 <code>height</code>로 지정합니다.</p>'
+      },
+      {
+        id: 16, type: 'mcq', chapter: '1장 · CSS 기초', tag: '배경색',
+        stem: 'CSS에서 요소의 배경색을 지정하는 속성은?',
+        options: ['color', 'background-color', 'font-color', 'bgcolor'], answer: 1,
+        explanation: '<strong>정답 ②</strong><p><code>background-color</code>는 요소의 배경색을 지정합니다. <code>color</code>는 글자색을 지정합니다.</p>'
+      },
+      {
+        id: 17, type: 'short', chapter: '2장 · HTML 기본', tag: '문서 골격',
+        stem: 'DOCTYPE 선언을 제외하고 HTML5 기본 문서 골격의 세 요소를 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>&lt;html&gt;</code> 안에 <code>&lt;head&gt;</code>와 <code>&lt;body&gt;</code>를 둡니다.</p>'
+      },
+      {
+        id: 18, type: 'short', chapter: '2장 · HTML 기본', tag: '상대 경로',
+        stem: 'HTML5/ch02_02/ex2.html에서 HTML5/media/cola.png를 불러오는 img 태그의 src 값을 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>../media/cola.png</code></p><p>한 단계 위로 올라간 뒤 media 폴더로 이동합니다.</p>'
+      },
+      {
+        id: 19, type: 'short', chapter: '2장 · HTML 기본', tag: '표 코드',
+        stem: '표 전체, 표 제목, 행, 제목 셀, 데이터 셀에 사용하는 태그 다섯 가지를 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>table</code>, <code>caption</code>, <code>tr</code>, <code>th</code>, <code>td</code></p>'
+      },
+      {
+        id: 20, type: 'short', chapter: '3장 · HTML 응용', tag: '시맨틱 구조',
+        stem: '머리말, 메뉴, 본문 구역, 독립 콘텐츠, 꼬리말에 해당하는 시맨틱 태그를 순서대로 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>header</code> → <code>nav</code> → <code>section</code> → <code>article</code> → <code>footer</code></p>'
+      },
+      {
+        id: 21, type: 'short', chapter: '3장 · HTML 응용', tag: 'iframe·target',
+        stem: 'iframe의 name이 in-right일 때 ex3-5.txt 링크를 그 프레임 안에서 열기 위한 a 태그의 두 속성을 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>href="ex3-5.txt" target="in-right"</code></p>'
+      },
+      {
+        id: 22, type: 'short', chapter: '3장 · HTML 응용', tag: '폼 전송',
+        stem: 'server.php로 폼 데이터를 주소에 노출하지 않고 전송하려 한다. form 시작 태그의 두 속성과 값을 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>&lt;form action="server.php" method="post"&gt;</code></p>'
+      },
+      {
+        id: 23, type: 'short', chapter: '1장 · CSS 기초', tag: '아이디 선택자',
+        stem: 'id가 box인 HTML 요소를 CSS에서 선택하는 선택자를 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>#box</code></p><p>아이디 선택자는 아이디 이름 앞에 <code>#</code>을 붙입니다.</p>'
+      },
+      {
+        id: 24, type: 'short', chapter: '1장 · CSS 기초', tag: '배경색',
+        stem: 'id가 box인 요소의 배경색을 검은색으로 바꾸는 CSS 속성과 값을 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>background-color: black;</code></p>'
+      },
+      {
+        id: 25, type: 'short', chapter: '1장 · CSS 기초', tag: '크기',
+        stem: 'id가 box인 요소의 크기를 가로 40px, 세로 50px로 바꾸는 두 CSS 선언을 쓰시오.',
+        answerHtml: '<strong>모범답안</strong><p><code>width: 40px;</code><br><code>height: 50px;</code></p>'
+      }
+    ];
+
+    const mcqSection = document.getElementById('mcqSection');
+    const shortSection = document.getElementById('shortSection');
+    const easyTips = {
+      1: '프로토콜은 통신을 위한 약속 또는 규칙입니다.',
+      2: '웹 문서 전송은 HTTP를 중심으로 기억하세요.',
+      3: '숫자로 된 네트워크 주소는 IP 주소입니다.',
+      4: '웹 페이지의 디자인과 표현은 CSS가 담당합니다.',
+      5: '기본 골격은 html, head, body입니다.',
+      6: '브라우저 탭 제목은 화면 본문이 아니라 head에 둡니다.',
+      7: '줄 바꿈은 break의 앞 두 글자인 br로 기억하세요.',
+      8: '..은 현재 폴더의 한 단계 위를 뜻합니다.',
+      9: 'tr은 table row, 즉 표의 행입니다.',
+      10: '주소는 href, 새 탭은 _blank입니다.',
+      11: '이미지와 마찬가지로 iframe의 문서 경로도 src에 씁니다.',
+      12: 'navigation의 앞 세 글자인 nav를 기억하세요.',
+      13: '여러 줄 입력은 textarea입니다.',
+      14: 'display: none은 요소와 자리 모두를 없앱니다.',
+      15: '가로는 width, 세로는 height입니다.',
+      16: '배경색은 background-color로 지정합니다.',
+      17: 'html 안에 head와 body가 들어갑니다.',
+      18: '한 단계 위로 간 뒤 media 폴더로 이동합니다.',
+      19: '표 전체·제목·행·제목 셀·데이터 셀을 구분하세요.',
+      20: '페이지 위에서 아래 방향의 구조를 떠올리세요.',
+      21: '링크 주소와 목적 프레임 이름이 모두 필요합니다.',
+      22: '전송 목적지 action과 전송 방식 method를 쓰세요.',
+      23: '아이디 이름 앞에는 # 기호를 붙입니다.',
+      24: '배경색 속성과 black 값을 함께 쓰세요.',
+      25: '가로는 width, 세로는 height입니다.'
+    };
+    const shortHints = {
+      17: '문서 전체 요소, 메타 정보 영역, 화면 본문 영역을 쓰세요.',
+      18: '상위 폴더 기호는 .. 입니다.',
+      19: 'table, 표 제목, row, header cell, data cell을 떠올리세요.',
+      20: 'header로 시작해 footer로 끝납니다.',
+      21: 'href와 target에 각각 파일 경로와 iframe 이름을 넣습니다.',
+      22: '주소에 값이 드러나는 GET이 아닌 방식을 사용합니다.',
+      23: 'box 앞에 아이디 선택자 기호를 붙이세요.',
+      24: 'background-color 속성을 사용합니다.',
+      25: 'width와 height에 각각 px 단위를 붙이세요.'
+    };
+    const sourcePdfs = {
+      1: 'chap_01연습문제.pdf · 1쪽',
+      2: 'chap_01연습문제.pdf · 1쪽',
+      3: 'chap_01연습문제.pdf · 1쪽',
+      4: 'chap_01연습문제.pdf · 2쪽',
+      5: '2장3장연습문제.pdf · 2쪽',
+      6: '2장3장연습문제.pdf · 2쪽',
+      7: '2장3장연습문제.pdf · 2~3쪽',
+      8: '2장3장연습문제.pdf · 3쪽',
+      9: '2장3장연습문제.pdf · 4~5쪽',
+      10: '2장3장연습문제.pdf · 4쪽',
+      11: '2장3장연습문제.pdf · 8쪽',
+      12: '2장3장연습문제.pdf · 8~9쪽',
+      13: '2장3장연습문제.pdf · 10~11쪽',
+      14: '연습문제_chap_05.pdf · 1쪽',
+      15: 'chap_01연습문제.pdf · 5쪽',
+      16: 'chap_01연습문제.pdf · 5쪽',
+      17: '2장3장연습문제.pdf · 6쪽',
+      18: '2장3장연습문제.pdf · 3쪽',
+      19: '2장3장연습문제.pdf · 4~5쪽',
+      20: '2장3장연습문제.pdf · 12~13쪽',
+      21: '2장3장연습문제.pdf · 11쪽',
+      22: '2장3장연습문제.pdf · 16쪽',
+      23: 'chap_01연습문제.pdf · 4~5쪽',
+      24: 'chap_01연습문제.pdf · 5쪽',
+      25: 'chap_01연습문제.pdf · 5쪽'
+    };
+    const wrongReasons = {
+      1: ['인터넷은 전 세계 네트워크의 연결망입니다.', '', '컴퓨터 네트워크는 연결된 통신 시스템 전체를 뜻합니다.', 'LAN은 제한된 지역의 근거리 통신망입니다.'],
+      2: ['FTP는 파일 전송에 주로 사용합니다.', 'TCP는 전송 계층 프로토콜입니다.', '', 'IP는 주소 지정과 패킷 전달을 담당합니다.'],
+      3: ['URL은 인터넷 자원의 전체 위치를 나타냅니다.', '', '도메인은 사람이 기억하기 쉬운 문자 주소입니다.', 'HTTP는 웹 문서를 전송하는 프로토콜입니다.'],
+      4: ['HTML은 문서의 구조와 내용을 담당합니다.', '', 'HTTP는 웹 문서 전송 프로토콜입니다.', 'URL은 인터넷 자원의 위치를 나타냅니다.'],
+      5: ['html은 문서 전체 요소입니다.', 'head는 메타 정보 영역입니다.', 'body는 화면 본문 영역입니다.', ''],
+      6: ['DOCTYPE은 문서 형식을 선언합니다.', 'title은 html 바깥에 두지 않습니다.', '', 'body는 화면에 표시할 본문 영역입니다.'],
+      7: ['p는 문단을 만듭니다.', '', 'hr은 수평선을 만듭니다.', 'h1은 가장 큰 수준의 제목입니다.'],
+      8: ['한 단계 위로 올라가는 ..이 빠졌습니다.', '', '두 단계 위로 올라가면 HTML5 폴더보다 위로 벗어납니다.', '제시된 폴더 구조와 맞지 않는 절대 경로입니다.'],
+      9: ['', 'td는 일반 데이터 셀입니다.', 'th는 제목 셀입니다.', 'caption은 표 제목입니다.'],
+      10: ['a 태그의 링크 주소 속성은 src가 아니라 href입니다.', '', 'link와 window는 해당 역할의 a 태그 속성이 아닙니다.', '_self는 현재 탐색 문맥에서 엽니다.'],
+      11: ['', 'name은 iframe을 구분하는 이름입니다.', 'target은 링크 결과를 표시할 위치를 지정합니다.', 'href는 a 태그의 링크 주소 속성입니다.'],
+      12: ['header는 머리말 영역입니다.', '', 'article은 독립 콘텐츠입니다.', 'footer는 꼬리말 영역입니다.'],
+      13: ['text 입력은 한 줄에 적합합니다.', 'radio는 하나를 선택하는 입력입니다.', '', 'select는 목록에서 항목을 고르는 요소입니다.'],
+      14: ['inline은 인라인 배치 값입니다.', 'block은 한 줄 영역을 차지합니다.', '', 'inline-block은 한 줄 배치와 크기 지정을 함께 제공합니다.'],
+      15: ['', 'height는 세로 크기를 지정합니다.', 'color는 글자색을 지정합니다.', 'margin은 요소 바깥 여백을 지정합니다.'],
+      16: ['color는 글자색을 지정합니다.', '', '표준 CSS 속성 이름이 아닙니다.', 'HTML 속성으로 쓰이던 이름이며 CSS 속성은 background-color입니다.']
+    };
+    const stateKey = 'web-programming-midterm-pdf-v4';
+    let graded = false;
+    let wrongFilter = false;
+    let currentQuestionIndex = 0;
+    let finalized = false;
+    let quizOrder = [];
+
+    function escapeAttr(text) {
+      return String(text).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    }
+
+    function renderQuestion(q) {
+      const isShort = q.type === 'short';
+      const options = isShort ? '' : `<div class="options">${q.options.map((option, index) => `
+        <label class="option" data-option="${index}">
+          <input type="radio" name="q${q.id}" value="${index}">
+          <span>${index + 1}. ${option}</span>
+        </label>`).join('')}</div>`;
+      const input = isShort ? `<textarea class="answer-area" id="answer-${q.id}" placeholder="핵심 단어만 짧게 적어도 됩니다." aria-label="${q.id}번 주관식 답안"></textarea>` : options;
+      const explanation = `${isShort ? q.answerHtml : q.explanation}<p class="memory-tip">이것만 기억: ${easyTips[q.id]}</p>`;
+      return `
+        <article class="question" id="q${q.id}" data-id="${q.id}" data-type="${q.type}">
+          <div class="q-meta">
+            <span class="q-no">${q.id}</span>
+            <span class="badge ${isShort ? 'warm' : ''}">${isShort ? '주관식' : '객관식'}</span>
+            <span class="badge source">${q.chapter}</span>
+            <span class="badge source">${q.tag}</span>
+          </div>
+          <h3>${q.stem}</h3>
+          <p class="pdf-source"><strong>출처 PDF</strong> · ${sourcePdfs[q.id]}</p>
+          ${input}
+          <div class="q-actions">
+            <button class="btn ghost small reveal" type="button" data-target="explain-${q.id}">${isShort ? '모범답안 확인' : '정답·해설 보기'}</button>
+            ${isShort ? `<button class="btn ghost small hint-toggle" type="button" data-hint="hint-${q.id}">힌트 보기</button>` : ''}
+          </div>
+          ${isShort ? `<div class="hint-box" id="hint-${q.id}"><strong>힌트</strong> · ${shortHints[q.id]}</div>` : ''}
+          <div class="instant-feedback" id="feedback-${q.id}" aria-live="polite"></div>
+          <div class="explanation" id="explain-${q.id}">${explanation}</div>
+          ${isShort ? `<div class="self-check" id="self-${q.id}"><label><input type="checkbox" data-self="${q.id}"> 핵심 내용을 맞게 썼음 (4점 인정)</label></div>` : ''}
+        </article>`;
+    }
+
+    mcqSection.innerHTML = questions.filter(q => q.type === 'mcq').map(renderQuestion).join('');
+    shortSection.innerHTML = questions.filter(q => q.type === 'short').map(renderQuestion).join('');
+    document.getElementById('jumpGrid').innerHTML = questions.map(q => `<a class="jump" href="#q${q.id}" data-jump="${q.id}">${q.id}</a>`).join('');
+
+    function shuffledQuestionIds() {
+      const ids = questions.map(q => q.id);
+      for (let i = ids.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [ids[i], ids[j]] = [ids[j], ids[i]];
+      }
+      return ids;
+    }
+
+    function rebuildQuestionPicker() {
+      document.getElementById('questionPicker').innerHTML = quizOrder.map((id, index) => `<option value="${index}">${index + 1}번</option>`).join('');
+    }
+
+    function getState() {
+      const choices = {};
+      const texts = {};
+      const self = {};
+      questions.forEach(q => {
+        if (q.type === 'mcq') {
+          const picked = document.querySelector(`input[name="q${q.id}"]:checked`);
+          if (picked) choices[q.id] = Number(picked.value);
+        } else {
+          texts[q.id] = document.getElementById(`answer-${q.id}`).value;
+          self[q.id] = document.querySelector(`[data-self="${q.id}"]`).checked;
+        }
+      });
+      return { choices, texts, self, finalized, order: quizOrder };
+    }
+
+    function saveState() {
+      localStorage.setItem(stateKey, JSON.stringify(getState()));
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(stateKey) || '{}');
+        const savedOrder = Array.isArray(saved.order) ? saved.order.map(Number) : [];
+        const validOrder = savedOrder.length === questions.length && new Set(savedOrder).size === questions.length && savedOrder.every(id => questions.some(q => q.id === id));
+        quizOrder = validOrder ? savedOrder : shuffledQuestionIds();
+        Object.entries(saved.choices || {}).forEach(([id, value]) => {
+          const input = document.querySelector(`input[name="q${id}"][value="${value}"]`);
+          if (input) input.checked = true;
+        });
+        Object.entries(saved.texts || {}).forEach(([id, value]) => {
+          const area = document.getElementById(`answer-${id}`);
+          if (area) area.value = value;
+        });
+        Object.entries(saved.self || {}).forEach(([id, value]) => {
+          const box = document.querySelector(`[data-self="${id}"]`);
+          if (box) box.checked = Boolean(value);
+        });
+        finalized = Boolean(saved.finalized);
+      } catch (_) {
+        quizOrder = shuffledQuestionIds();
+      }
+    }
+
+    function updateProgress() {
+      let answered = 0;
+      let correct = 0;
+      let mcqAnswered = 0;
+      questions.forEach(q => {
+        const done = q.type === 'mcq'
+          ? Boolean(document.querySelector(`input[name="q${q.id}"]:checked`))
+          : document.getElementById(`answer-${q.id}`).value.trim().length > 0;
+        document.querySelector(`[data-jump="${q.id}"]`).classList.toggle('done', done);
+        if (done) answered += 1;
+        if (q.type === 'mcq') {
+          const picked = document.querySelector(`input[name="q${q.id}"]:checked`);
+          if (picked) mcqAnswered += 1;
+          if (picked && Number(picked.value) === q.answer) correct += 1;
+        }
+      });
+      document.getElementById('answeredCount').textContent = answered;
+      document.getElementById('progressFill').style.width = `${answered / 25 * 100}%`;
+      document.getElementById('simpleAnswered').textContent = `응답 ${answered} / 25`;
+      document.getElementById('liveScore').textContent = `객관식 확정 ${mcqAnswered} / 16`;
+      document.getElementById('simpleFill').style.width = `${answered / 25 * 100}%`;
+      saveState();
+    }
+
+    function gradeSingle(questionId, scrollFeedback = true) {
+      const q = questions.find(item => item.id === questionId && item.type === 'mcq');
+      if (!q) return;
+      const card = document.getElementById(`q${q.id}`);
+      const picked = document.querySelector(`input[name="q${q.id}"]:checked`);
+      if (!picked) return;
+      const selected = Number(picked.value);
+      const feedback = document.getElementById(`feedback-${q.id}`);
+      card.querySelectorAll('input[type="radio"]').forEach(input => { input.disabled = true; });
+      card.querySelectorAll('.option').forEach(el => el.classList.add('locked'));
+      card.dataset.locked = 'true';
+      card.classList.remove('is-correct', 'is-wrong');
+      card.querySelectorAll('.option').forEach(el => el.classList.remove('correct-choice', 'wrong-choice'));
+      card.querySelector(`[data-option="${q.answer}"]`).classList.add('correct-choice');
+      feedback.className = 'instant-feedback show';
+      if (selected === q.answer) {
+        card.classList.add('is-correct');
+        feedback.classList.add('correct');
+        feedback.textContent = '정답입니다.';
+      } else {
+        card.classList.add('is-wrong');
+        card.querySelector(`[data-option="${selected}"]`).classList.add('wrong-choice');
+        feedback.classList.add('wrong');
+        feedback.innerHTML = `<strong>오답입니다. 정답은 ${q.answer + 1}번입니다.</strong><p>${wrongReasons[q.id][selected]}</p>`;
+      }
+      document.getElementById(`explain-${q.id}`).classList.add('show');
+      if (scrollFeedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showQuestion(index, scroll = true) {
+      currentQuestionIndex = Math.max(0, Math.min(questions.length - 1, index));
+      document.querySelectorAll('.question').forEach(card => card.classList.remove('active'));
+      const q = questions.find(item => item.id === quizOrder[currentQuestionIndex]);
+      const card = document.getElementById(`q${q.id}`);
+      card.classList.add('active');
+      card.querySelector('.q-no').textContent = currentQuestionIndex + 1;
+      document.getElementById('questionCounter').textContent = `${currentQuestionIndex + 1} / 25 · ${q.type === 'mcq' ? '객관식' : '주관식'}`;
+      document.getElementById('questionPicker').value = String(currentQuestionIndex);
+      document.getElementById('prevQuestion').disabled = currentQuestionIndex === 0;
+      document.getElementById('nextQuestion').disabled = false;
+      document.getElementById('nextQuestion').textContent = currentQuestionIndex === questions.length - 1 ? '결과 보기' : '다음';
+      if (scroll) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function normalizeAnswer(value) {
+      return value.toLowerCase().replace(/\s+/g, '').replace(/["']/g, '');
+    }
+
+    function isShortAnswerCorrect(id, value) {
+      const n = normalizeAnswer(value).replace(/[<>;]/g, '');
+      if (!n) return false;
+      if (id === 17) return n.includes('html') && n.includes('head') && n.includes('body');
+      if (id === 18) return n.includes('../media/cola.png');
+      if (id === 19) return ['table', 'caption', 'tr', 'th', 'td'].every(token => n.includes(token));
+      if (id === 20) return ['header', 'nav', 'section', 'article', 'footer'].every(token => n.includes(token));
+      if (id === 21) return n.includes('href') && n.includes('ex3-5.txt') && n.includes('target') && n.includes('in-right');
+      if (id === 22) return n.includes('action') && n.includes('server.php') && n.includes('method') && n.includes('post');
+      if (id === 23) return n.includes('#box');
+      if (id === 24) return n.includes('background-color') && n.includes('black');
+      if (id === 25) return n.includes('width') && n.includes('40px') && n.includes('height') && n.includes('50px');
+      return false;
+    }
+
+    function calculateFinalResult() {
+      let mcqCorrect = 0;
+      let mcqAttempted = 0;
+      let shortCorrect = 0;
+      let shortAttempted = 0;
+      questions.forEach(q => {
+        if (q.type === 'mcq') {
+          const picked = document.querySelector(`input[name="q${q.id}"]:checked`);
+          if (picked) {
+            mcqAttempted += 1;
+            if (Number(picked.value) === q.answer) mcqCorrect += 1;
+          }
+        } else {
+          const value = document.getElementById(`answer-${q.id}`).value;
+          if (value.trim()) {
+            shortAttempted += 1;
+            if (isShortAnswerCorrect(q.id, value)) shortCorrect += 1;
+          }
+        }
+      });
+      return { mcqCorrect, mcqAttempted, shortCorrect, shortAttempted };
+    }
+
+    function showFinalResult(scroll = true) {
+      finalized = true;
+      document.querySelectorAll('input[type="radio"], textarea').forEach(el => { el.disabled = true; });
+      const result = calculateFinalResult();
+      const correct = result.mcqCorrect + result.shortCorrect;
+      const attempted = result.mcqAttempted + result.shortAttempted;
+      const wrong = attempted - correct;
+      const unanswered = 25 - attempted;
+      document.getElementById('finalScore').textContent = `${correct * 4}점`;
+      document.getElementById('finalCount').textContent = `정답 ${correct} / 25 · 오답 ${wrong}개`;
+      document.getElementById('finalBreakdown').innerHTML = `객관식 <strong>${result.mcqCorrect} / 16</strong><br>주관식 <strong>${result.shortCorrect} / 9</strong>${unanswered ? `<br>미응답 <strong>${unanswered}개</strong>` : ''}`;
+      const panel = document.getElementById('finalResult');
+      panel.classList.add('show');
+      saveState();
+      if (scroll) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function grade() {
+      let correct = 0;
+      let attempted = 0;
+      questions.filter(q => q.type === 'mcq').forEach(q => {
+        const card = document.getElementById(`q${q.id}`);
+        const picked = document.querySelector(`input[name="q${q.id}"]:checked`);
+        card.classList.remove('is-correct', 'is-wrong');
+        card.querySelectorAll('.option').forEach(el => el.classList.remove('correct-choice', 'wrong-choice'));
+        card.querySelector(`[data-option="${q.answer}"]`).classList.add('correct-choice');
+        const jump = document.querySelector(`[data-jump="${q.id}"]`);
+        jump.classList.remove('wrong');
+        if (picked) {
+          attempted += 1;
+          if (Number(picked.value) === q.answer) {
+            correct += 1;
+            card.classList.add('is-correct');
+          } else {
+            card.classList.add('is-wrong');
+            card.querySelector(`[data-option="${picked.value}"]`).classList.add('wrong-choice');
+            jump.classList.add('wrong');
+          }
+        } else {
+          card.classList.add('is-wrong');
+          jump.classList.add('wrong');
+        }
+      });
+      graded = true;
+      document.getElementById('wrongOnly').disabled = false;
+      const selfCount = [...document.querySelectorAll('[data-self]:checked')].length;
+      document.getElementById('scoreText').textContent = `${correct} / 16`;
+      document.getElementById('scoreSub').textContent = `객관식 ${attempted}문항 응답 · 주관식 자기채점 ${selfCount}/9 · 연습 환산점수 ${(correct + selfCount) * 4}/100`;
+      document.getElementById('result').classList.add('show');
+      document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      toast('채점이 완료되었습니다. 정답 선택지는 초록색으로 표시됩니다.');
+    }
+
+    function reveal(targetId, button) {
+      const panel = document.getElementById(targetId);
+      const showing = panel.classList.toggle('show');
+      button.textContent = showing ? '해설 닫기' : (targetId.replace('explain-', '') > 16 ? '모범답안 보기' : '정답·해설 보기');
+      const id = Number(targetId.replace('explain-', ''));
+      const self = document.getElementById(`self-${id}`);
+      if (self) self.classList.toggle('show', showing);
+    }
+
+    function revealAll(show = true) {
+      document.querySelectorAll('.explanation').forEach(el => el.classList.toggle('show', show));
+      document.querySelectorAll('.self-check').forEach(el => el.classList.toggle('show', show));
+      document.querySelectorAll('.reveal').forEach(btn => btn.textContent = show ? '해설 닫기' : (Number(btn.dataset.target.replace('explain-', '')) > 16 ? '모범답안 보기' : '정답·해설 보기'));
+      toast(show ? '모든 해설을 열었습니다.' : '모든 해설을 닫았습니다.');
+    }
+
+    function toggleWrongOnly() {
+      if (!graded) return;
+      wrongFilter = !wrongFilter;
+      questions.forEach(q => {
+        const card = document.getElementById(`q${q.id}`);
+        if (q.type === 'short') card.classList.toggle('hidden-by-filter', wrongFilter);
+        else card.classList.toggle('hidden-by-filter', wrongFilter && !card.classList.contains('is-wrong'));
+      });
+      document.getElementById('wrongOnly').textContent = wrongFilter ? '전체 보기' : '오답만';
+    }
+
+    function toast(message) {
+      const el = document.getElementById('toast');
+      el.textContent = message;
+      el.classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    document.addEventListener('change', event => {
+      if (event.target.matches('input[type="radio"]')) {
+        gradeSingle(Number(event.target.name.replace('q', '')));
+        updateProgress();
+      }
+      if (event.target.matches('[data-self]')) updateProgress();
+    });
+    document.addEventListener('input', event => {
+      if (event.target.matches('.answer-area')) updateProgress();
+    });
+    document.querySelectorAll('.reveal').forEach(button => {
+      button.addEventListener('click', () => reveal(button.dataset.target, button));
+    });
+    document.querySelectorAll('.hint-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const box = document.getElementById(button.dataset.hint);
+        const showing = box.classList.toggle('show');
+        button.textContent = showing ? '힌트 닫기' : '힌트 보기';
+      });
+    });
+    document.getElementById('prevQuestion').addEventListener('click', () => showQuestion(currentQuestionIndex - 1));
+    function goNext() {
+      if (currentQuestionIndex === questions.length - 1) showFinalResult();
+      else showQuestion(currentQuestionIndex + 1);
+    }
+    document.getElementById('nextQuestion').addEventListener('click', goNext);
+    document.getElementById('questionPicker').addEventListener('change', event => showQuestion(Number(event.target.value)));
+    document.addEventListener('keydown', event => {
+      const editing = event.target.matches('textarea, input:not([type="radio"]), select, [contenteditable="true"]');
+      if (editing) return;
+      const q = questions.find(item => item.id === quizOrder[currentQuestionIndex]);
+      if (/^[1-4]$/.test(event.key) && q.type === 'mcq' && !finalized) {
+        const input = document.querySelector(`input[name="q${q.id}"][value="${Number(event.key) - 1}"]`);
+        if (input && !input.disabled) {
+          event.preventDefault();
+          input.checked = true;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      } else if (event.key === 'ArrowLeft' && currentQuestionIndex > 0) {
+        event.preventDefault();
+        showQuestion(currentQuestionIndex - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        goNext();
+      }
+    });
+    document.getElementById('gradeSide').addEventListener('click', grade);
+    document.getElementById('gradeMain').addEventListener('click', grade);
+    document.getElementById('wrongOnly').addEventListener('click', toggleWrongOnly);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    document.getElementById('revealMain').addEventListener('click', () => {
+      questions.filter(q => q.type === 'short').forEach(q => {
+        document.getElementById(`explain-${q.id}`).classList.add('show');
+        document.getElementById(`self-${q.id}`).classList.add('show');
+      });
+      toast('주관식 모범답안을 열었습니다.');
+    });
+    document.getElementById('revealAll').addEventListener('click', () => {
+      const anyClosed = [...document.querySelectorAll('.explanation')].some(el => !el.classList.contains('show'));
+      revealAll(anyClosed);
+    });
+    function resetQuiz() {
+      if (!confirm('작성한 답안과 채점 결과를 모두 초기화할까요?')) return;
+      localStorage.removeItem(stateKey);
+      document.querySelectorAll('input').forEach(el => { el.checked = false; el.disabled = false; });
+      document.querySelectorAll('textarea').forEach(el => { el.value = ''; el.disabled = false; });
+      document.querySelectorAll('.question').forEach(el => el.classList.remove('is-correct', 'is-wrong', 'hidden-by-filter'));
+      document.querySelectorAll('.question').forEach(el => { delete el.dataset.locked; });
+      document.querySelectorAll('.option').forEach(el => el.classList.remove('correct-choice', 'wrong-choice', 'locked'));
+      document.querySelectorAll('.jump').forEach(el => el.classList.remove('done', 'wrong'));
+      document.getElementById('result').classList.remove('show');
+      document.getElementById('finalResult').classList.remove('show');
+      document.getElementById('wrongOnly').disabled = true;
+      document.getElementById('wrongOnly').textContent = '오답만';
+      graded = false; wrongFilter = false; finalized = false;
+      quizOrder = shuffledQuestionIds();
+      rebuildQuestionPicker();
+      revealAll(false); updateProgress(); resetTimer();
+      document.querySelectorAll('.hint-box').forEach(el => el.classList.remove('show'));
+      document.querySelectorAll('.hint-toggle').forEach(el => { el.textContent = '힌트 보기'; });
+      document.querySelectorAll('.instant-feedback').forEach(el => { el.className = 'instant-feedback'; el.textContent = ''; });
+      showQuestion(0);
+      toast('초기화했습니다.');
+    }
+    document.getElementById('resetAll').addEventListener('click', resetQuiz);
+    document.getElementById('simpleReset').addEventListener('click', resetQuiz);
+    document.getElementById('restartFromResult').addEventListener('click', resetQuiz);
+
+    let remaining = 60 * 60;
+    let timerId = null;
+    const timerEl = document.getElementById('timer');
+    const timerToggle = document.getElementById('timerToggle');
+    function drawTimer() {
+      const min = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const sec = String(remaining % 60).padStart(2, '0');
+      timerEl.textContent = `${min}:${sec}`;
+      timerEl.classList.toggle('danger', remaining <= 300);
+    }
+    function stopTimer() {
+      clearInterval(timerId); timerId = null; timerToggle.textContent = '시작';
+    }
+    function resetTimer() { stopTimer(); remaining = 60 * 60; drawTimer(); }
+    timerToggle.addEventListener('click', () => {
+      if (timerId) { stopTimer(); return; }
+      timerToggle.textContent = '일시정지';
+      timerId = setInterval(() => {
+        remaining -= 1; drawTimer();
+        if (remaining <= 0) { stopTimer(); toast('권장 풀이 시간이 끝났습니다.'); }
+      }, 1000);
+    });
+    document.getElementById('timerReset').addEventListener('click', resetTimer);
+
+    loadState();
+    rebuildQuestionPicker();
+    questions.filter(q => q.type === 'mcq').forEach(q => {
+      if (document.querySelector(`input[name="q${q.id}"]:checked`)) gradeSingle(q.id, false);
+    });
+    updateProgress();
+    drawTimer();
+    const firstUnanswered = quizOrder.findIndex(id => {
+      const q = questions.find(item => item.id === id);
+      return q.type === 'mcq'
+        ? !document.querySelector(`input[name="q${q.id}"]:checked`)
+        : document.getElementById(`answer-${q.id}`).value.trim() === '';
+    });
+    showQuestion(firstUnanswered === -1 ? 0 : firstUnanswered, false);
+    if (finalized) showFinalResult(false);
+  </script>
+</body>
+</html>
